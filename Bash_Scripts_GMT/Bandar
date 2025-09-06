@@ -1,0 +1,56 @@
+#!/bin/sh
+region=-R55/58/26/29
+projection=-JM10
+output=Hormozgan.ps
+grd_file=../Example_06/Topo_Iran.grd
+palette=-C../Example_06/Palette_Iran.cpt
+
+gmt grdgradient $grd_file  -Gout.grd -A270 -Ne0.9 -V
+gmt grdimage $grd_file  $palette $projection $region -Iout.grd  -Y12 -K -V -P > $output
+
+gmt pscoast $projection $region -Df -Lf55.70/26.25/0.095/100+l -Na/1/0/0/0   -C0/100/255 -I4/0/100/255  -S0/100/255 -A20 -B0.5f0.5/0.5f0.5:."":WSne -P  -V -K -O >> $output
+
+
+
+
+gmt set FORMAT_GEO_MAP D
+
+gmt set FONT_ANNOT_PRIMARY 20p,Helvetica,black
+
+
+gmt psxy JIROFT  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O >>  $output
+gmt psxy Sabzevaran  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
+gmt psxy 1  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
+gmt psxy MZRF  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
+gmt psxy Zendan-Minab  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
+gmt psxy HZF  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
+gmt psxy 2  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
+gmt psxy MFF  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
+
+gmt psxy  M4-5BandarAbbas $projection $region  -W0/0/0 -G0/0/255 -Sc0.3c -h3 -P -V -K -O >> $output
+gmt psxy M5-6BandarAbbas $projection $region  -W0/0/0 -G0/255/0 -Sc0.4c -h3 -P -V -K -O >> $output
+gmt psxy M5-6BandarAbbas1 $projection $region  -W0/0/0 -G0/255/0 -Sc0.4c -h3 -P -V -K -O >> $output
+gmt psxy M6-7BandarAbbas $region $projection  -W0/0/0 -G255/255/0 -Sa1c -h3 -P -V -K -O >> $output
+gmt psxy M6-7BandarAbbas1 $region $projection  -W0/0/0 -G255/255/0 -Sa1c -h3 -P -V -K -O >> $output
+gmt psxy MinabCoordinate $region $projection  -W0/0/0 -G0/0/0 -Ss0.4 -h3 -P -V -K -O >> $output
+gmt psxy FinCoordinate $region $projection  -W0/0/0 -G0/0/0 -Ss0.4 -h3 -P -V -K -O >> $output
+
+gmt pstext $region $projection  -P -V  -O -F+f13p,Times−Bold+jRB  -K <<END>>  $output
+57.7	27.60 13 310  5  5  Jiroft
+57.5	28.90 13 280  5  5  Sabzevaran
+56.0	28.40 13 340  5  5  MZRF
+56.0	28.00 13 340  5  5  HZF
+55.30	27    13 20   5  5  MFF
+57.25	27.00 13 290  5  5  Zendan-Minab
+55.78	27.76 13  0  5  5   Fin
+56.90   27.28 13  0  5  5   Minab
+56.20    26.55 13 0   5  5  Oman Gulf
+
+
+
+END
+
+
+
+evince $output
+

@@ -1,0 +1,66 @@
+#!/bin/sh
+
+#region=-R49.5/52.5/27.5/30.5
+#gmt begin Bushehr jpg
+xmin=49.5
+xmax=52.5
+ymin=27.5
+ymax=30.5
+#midlon=`gmt gmtmath -Q $xmin $xmax ADD 2 DIV =`
+#midlat=`gmt gmtmath -Q $ymin $ymax ADD 2 DIV =`
+
+
+region="-R$xmin/$xmax/$ymin/$ymax"
+projection=-JM10
+output=Bushehr.ps
+grd_file=../Example_06/Topo_Iran.grd
+palette=-C../Example_06/Palette_Iran.cpt
+
+
+gmt set -C
+gmt set FONT_ANNOT_PRIMARY 20p,Helvetica,black
+
+gmt grdgradient $grd_file  -Gout.grd -A270 -Ne0.9 -V
+gmt grdimage $grd_file  $palette $projection $region -Iout.grd  -Y12 -K -V -P > $output
+
+
+
+gmt pscoast $projection $region -Df -Lf50.20/27.75/0.095/100+l -Na/1/0/0/0   -C0/100/255 -I4/0/100/255  -S0/100/255 -A20 -Bxa0.5+ud -Bya0.5+ud -BWSne -P  -V -K -O >> $output
+
+gmt set -C
+gmt set FONT_ANNOT_PRIMARY 20p,Helvetica,black
+
+#-Bxa10g10 -Bya5g5  #B0.5f0.5/0.5f0.5:."":WSne  -TR+w200k+u+f+c38:30N+o0.5i/0.2i
+#gmt pscoast $projection -B $region -Dh -N1/1.00p,- -K -O -W >>$output
+
+#-Lf46/26/0.2/500+l -Lf50.5/27.75/0.095/200+l
+gmt psxy ZFF  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O >>  $output
+gmt psxy Borazjan  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O>>  $output
+gmt psxy MFF1  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
+gmt psxy ZFF1  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
+gmt psxy ZFF2  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
+
+gmt psxy M4-5Bushehr $projection $region  -W0/0/0 -G0/0/255 -Sc0.3c -h3 -P -V -K -O >> $output
+gmt psxy M5-6Bushehr $projection $region  -W0/0/0 -G0/255/0 -Sc0.4c -h3 -P -V -K -O >> $output
+gmt psxy MainBushehr $region $projection  -W0/0/0 -G255/255/0 -Sa1c -h3 -P -V -K -O >> $output
+gmt psxy BushehrCoordinate $region $projection  -W0/0/0 -G0/0/0 -Ss0.4 -h3 -P -V -K -O >> $output
+gmt psxy ShonbehCoordinate $region $projection  -W0/0/0 -G0/0/0 -Ss0.4 -h3 -P -V -K -O >> $output
+
+#-F+f16p,Times−Bold+jRB 
+
+
+
+gmt pstext $region $projection  -P -V -F+f13p,Times-Bold+jRB-K -O <<END>>  $output
+
+50.75	30.30 13 310  5  5  ZFF
+51.77   29.45 13 280  5  5  Borazjan
+51.90	28.60 13 340  5  5  MFF
+52.0	28.00 13 340  5  5  ZFF
+51.40	28.75 13 280  5  5  ZFF
+50.72   28.82   13  0  5  5  Bushehr
+51.8652 28.29  13 0  5  5  Shonbeh
+50.00   28.50 13 320 5  5  Persian Gulf
+
+END
+evince $output
+

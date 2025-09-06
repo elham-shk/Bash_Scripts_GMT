@@ -1,0 +1,56 @@
+#!/bin/sh
+region=-R43/64/24/40
+projection=-JM10
+output=Iran.ps
+grd_file=../Example_06/Topo_Iran.grd
+palette=-C../Example_06/Palette_Iran.cpt
+
+gmt grdgradient $grd_file  -Gout.grd -A270 -Ne0.9 -V
+gmt grdimage $grd_file  $palette $projection $region -Iout.grd  -Y12 -K -V -P > $output
+
+gmt set -C
+gmt set FONT_ANNOT_PRIMARY 14p,Times-Bold,black
+
+
+#gmt set FONT_ANNOT_PRIMARY 14p,Helvetica,Bold,black
+
+#-B2f2g5/2f2g5:."":WSne 
+gmt pscoast $projection $region -Df  -Na/1/0/0/0   -C0/100/255 -I4/0/100/255  -S0/100/255 -A20 -B2f2/2f2:."":WSne -TdjTR+w1+f1+l,,,N+o0.35/0.5 -P  -V -K -O >> $output
+#oofset from AXis o0.75/1.25 
+
+# -Lf46/26/0.2/500+l  -T+d15p/3p -T46/38/0.4  TR+w200k+u+f+c38:30N+o0.5i/0.2i  -TdjTR+w1+f1+l+o2/1
+gmt psxy M4-5Iran $projection $region  -W0/0/0 -G0/0/255 -Sc0.2c -h3 -P -V -K -O >> $output
+gmt psxy M4-5Iran_gap $projection $region  -W0/0/0 -G0/0/255 -Sc0.2c -h3 -P -V -K -O >> $output
+gmt psxy M5-6Iran $projection $region  -W0/0/0 -G0/255/0 -Sc0.27c -h3 -P -V -K -O >> $output
+gmt psxy M5-6Iran_gap $projection $region  -W0/0/0 -G0/255/0 -Sc0.27c -h3 -P -V -K -O >> $output
+gmt psxy M6-7Iran $region $projection  -W0/0/0 -G240/0/0 -Sc0.34c  -h3 -P -V -K -O >> $output
+gmt psxy M6-7Iran-gap $region $projection  -W0/0/0 -G240/0/0 -Sc0.34c  -h3 -P -V -K -O >> $output
+gmt psxy MainBushehr $region $projection  -W0/0/0 -G255/255/0 -Sa0.7c -h3 -P -V -K -O >> $output
+gmt psxy M6-7BandarAbbas $region $projection  -W0/0/0 -G255/255/0 -Sa0.7c -h3 -P -V -K -O >> $output
+gmt psxy M6-7BandarAbbas1 $region $projection  -W0/0/0 -G255/255/0 -Sa.7c -h3 -P -V -K -O >> $output
+
+gmt pslegend -F+glightyellow+p1p,0 -Dx0c/0.05c+w2.3c/2.5c -C0.2c/0.2c -P -V -K -O << END >> $output
+H 10 Helvetica-Bold Magnitude
+V 0 1p
+D 0 1p
+N 1
+# N1 is the column order of the data in the legend (1 column)
+# -Dx8c/0c is the position of the legend # Dx5c/8c+w2.3c/2.3c 
+S 0.01c c  0.2c  0/0/255 0.01p,0 0.5c Mw4-5
+S 0.01c c 0.27c  0/255/0 0.2p,0 0.5c Mw5-6
+S 0.01c c 0.34c  240/0/0 0.2p,0 0.5c Mw6-7
+
+END
+
+gmt pstext $region $projection  -P -V -F+f13p,Times-Bold+jRB-K -O  <<END>> $output
+49.50  38.50 11 0   4  5  Caspian Sea
+50.00  27.50 11 310 4  5  Persian Gulf
+53.00  34.00 11 0 5  5  IRAN
+58.00  24.55 11 0 4  5  Oman Gulf
+
+END
+
+
+
+evince $output
+
