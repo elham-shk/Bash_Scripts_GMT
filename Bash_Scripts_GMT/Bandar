@@ -18,7 +18,7 @@ gmt set FORMAT_GEO_MAP D
 gmt set FONT_ANNOT_PRIMARY 20p,Helvetica,black
 
 
-gmt psxy JIROFT  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O >>  $output
+gmt psxy JIROFT  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O >> $output
 gmt psxy Sabzevaran  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
 gmt psxy 1  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
 gmt psxy MZRF  $region $projection -W2p,red -Sf2/0.10rt:0.2 -P -K -O  >>  $output
